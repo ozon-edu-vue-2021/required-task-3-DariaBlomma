@@ -32,8 +32,33 @@
           <span v-else class="legend--empty"> Список пуст </span>
         </div>
         <div class="legend__chart">
+          <div class="chart-type-choice">
+            <span>
+              <input
+                type="radio"
+                id="doughnut"
+                name="chartType"
+                value="doughnut"
+                class="radio-input"
+                v-model="picked"
+              />
+              <label for="doughnut">Doughnut</label>
+            </span>
+            <span>
+              <input
+                type="radio"
+                id="pie"
+                name="chartType"
+                value="pie"
+                class="radio-input"
+                v-model="picked"
+              />
+              <label for="pie">Pie</label>
+            </span>
+          </div>
           <!-- chart -->
-          <Doughnut ref="chart" />
+          <Doughnut v-show="picked === 'doughnut'" ref="chart" />
+          <Pie v-show="picked === 'pie'" ref="pieChart" />
         </div>
       </div>
       <div v-else class="profile">
@@ -50,7 +75,7 @@ import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
 import legend from "@/assets/data/legend.json";
 import Draggable from "vuedraggable";
-import { Doughnut } from "vue-chartjs";
+import { Doughnut, Pie } from "vue-chartjs";
 
 export default {
   props: {
@@ -68,17 +93,20 @@ export default {
     PersonCard,
     Draggable,
     Doughnut,
+    Pie,
   },
   data() {
     return {
       legend: [],
+      picked: "doughnut",
     };
   },
   created() {
     this.loadLegend();
   },
   mounted() {
-    this.makeChart();
+    this.makeChart(this.$refs.chart);
+    this.makeChart(this.$refs.pieChart);
   },
   methods: {
     loadLegend() {
@@ -87,7 +115,7 @@ export default {
     closeProfile() {
       this.$emit("update:isUserOpenned", false);
     },
-    makeChart() {
+    makeChart(chart) {
       const chartData = {
         labels: this.legend.map((legendItem) => legendItem.text),
         datasets: [
@@ -95,6 +123,7 @@ export default {
             legend: "Легенда",
             backgroundColor: this.legend.map((legendItem) => legendItem.color),
             data: this.legend.map((legendItem) => legendItem.counter),
+            hoverOffset: 7,
           },
         ],
       };
@@ -104,7 +133,8 @@ export default {
           display: false,
         },
       };
-      this.$refs.chart.renderChart(chartData, options);
+
+      chart.renderChart(chartData, options);
     },
   },
 };
@@ -201,5 +231,15 @@ h3 {
 
 .profile {
   padding-top: 20px;
+}
+
+.chart-type-choice {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px auto;
+}
+
+.radio-input {
+  margin-right: 10px;
 }
 </style>
