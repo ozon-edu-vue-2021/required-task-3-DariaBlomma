@@ -10,6 +10,7 @@
             <div class="arrow" @click="closeProfile"></div>
           </div>
           <h3>Профиль</h3>
+          <AccoutSvg class="account-svg"/>
         </template>
       </div>
       <div class="toolbar__actions"></div>
@@ -63,7 +64,6 @@
       </div>
       <div v-else class="profile">
         <div v-if="!person" class="profile__empty">Место пустое</div>
-
         <PersonCard :person="person" />
       </div>
     </div>
@@ -76,6 +76,7 @@ import PersonCard from "./SideMenu/PersonCard.vue";
 import legend from "@/assets/data/legend.json";
 import Draggable from "vuedraggable";
 import { Doughnut, Pie } from "vue-chartjs";
+import AccoutSvg from "@/assets/images/account.svg";
 
 export default {
   props: {
@@ -94,6 +95,7 @@ export default {
     Draggable,
     Doughnut,
     Pie,
+    AccoutSvg,
   },
   data() {
     return {
@@ -105,8 +107,11 @@ export default {
     this.loadLegend();
   },
   mounted() {
-    this.makeChart(this.$refs.chart);
-    this.makeChart(this.$refs.pieChart);
+    this.renderCharts();
+  },
+  updated() {
+  // для отрисовки графиков после закрытия боковой панели с отдельным работником 
+    this.renderCharts();
   },
   methods: {
     loadLegend() {
@@ -114,6 +119,12 @@ export default {
     },
     closeProfile() {
       this.$emit("update:isUserOpenned", false);
+    },
+    renderCharts() {
+      if (!this.isUserOpenned) {
+        this.makeChart(this.$refs.chart);
+        this.makeChart(this.$refs.pieChart);
+      }
     },
     makeChart(chart) {
       const chartData = {
@@ -231,6 +242,10 @@ h3 {
 
 .profile {
   padding-top: 20px;
+}
+
+.account-svg {
+  margin-left: 10px;
 }
 
 .chart-type-choice {

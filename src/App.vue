@@ -1,8 +1,12 @@
 <template>
   <div id="app">
-    <div class="office">
+    <div class="office" @click="showPersonCard">
       <Map />
-      <SideMenu />
+      <SideMenu 
+        :isUserOpenned="personCardOpened"
+        :person="person"
+        @isUserOpenned="personCardOpened = false"
+      />
     </div>
   </div>
 </template>
@@ -10,12 +14,34 @@
 <script>
 import Map from "./components/Map.vue";
 import SideMenu from "./components/SideMenu.vue";
+import people from "@/assets/data/people.json";
 
 export default {
   name: "App",
   components: {
     Map,
     SideMenu,
+  },
+  data() {
+    return {
+      personCardOpened: false,
+      person: null,
+    };
+  },
+  methods: {
+    showPersonCard({ target }) {
+      if (target.matches(".wrapper-table")) {
+        this.personCardOpened = true;
+        const table = target.closest(".employer-place");
+        people.forEach((item) => {
+          if (item.tableId == table.id) {
+            this.person = item;
+          }
+        });
+      } else {
+        this.personCardOpened = false;
+      }
+    },
   },
 };
 </script>
