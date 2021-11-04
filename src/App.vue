@@ -2,10 +2,10 @@
   <div id="app">
     <div class="office" @click="showPersonCard">
       <Map />
-      <SideMenu 
+      <SideMenu
         :isUserOpenned="personCardOpened"
         :person="person"
-        @isUserOpenned="personCardOpened = false"
+        @userOpenned="personCardOpened = false"
       />
     </div>
   </div>

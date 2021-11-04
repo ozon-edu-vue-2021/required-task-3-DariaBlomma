@@ -10,7 +10,7 @@
             <div class="arrow" @click="closeProfile"></div>
           </div>
           <h3>Профиль</h3>
-          <AccoutSvg class="account-svg"/>
+          <AccoutSvg class="account-svg" />
         </template>
       </div>
       <div class="toolbar__actions"></div>
@@ -110,7 +110,7 @@ export default {
     this.renderCharts();
   },
   updated() {
-  // для отрисовки графиков после закрытия боковой панели с отдельным работником 
+    // для отрисовки графиков после закрытия боковой панели с отдельным работником
     this.renderCharts();
   },
   methods: {

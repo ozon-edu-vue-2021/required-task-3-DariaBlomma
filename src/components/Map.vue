@@ -49,7 +49,7 @@ export default {
     drawTables() {
       // создаем группу рабочих местм
       const svgTablesGroup = this.g.append("g").classed("groupPlaces", true);
-      this.tables.map((table) => {
+      this.tables.forEach((table) => {
         // создать группу рабочего стола
         const svgTable = svgTablesGroup
           .append("g")
